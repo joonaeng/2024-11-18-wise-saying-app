@@ -27,18 +27,37 @@ class App {
 
             String[] parts = cmd.split("\\?");
 
-            if(parts[0].equals("삭제")) {
+            if(parts[0].equals("삭제")) { //명언 삭제
                 String param = parts[1];
 
                 String[] KeyValue = param.split("=");
                 if(KeyValue[0].equals("id")) {
                     int Value = Integer.parseInt(KeyValue[1]);
                     if(lastId < Value) {
-                        System.out.println("삭제할 명언이 없습니다.");
+                        System.out.printf("%d번 명언은 존재하지 않습니다.\n",Value);
                     }else{
                         if(ws.get(Value-1)!=null) {
                             ws.set(Value-1, null);
                             System.out.printf("%d번 명언이 삭제되었습니다.\n",Value);
+                        }else System.out.printf("%d번 명언은 존재하지 않습니다.\n",Value);
+                    }
+                }
+            }else if(parts[0].equals("수정")) { //명언 수정
+                String param = parts[1];
+
+                String[] KeyValue = param.split("=");
+                if(KeyValue[0].equals("id")) {
+                    int Value = Integer.parseInt(KeyValue[1]);
+                    if(lastId < Value) {
+                        System.out.printf("%d번 명언은 존재하지 않습니다.\n",Value);
+                    }else{
+                        if(ws.get(Value-1)!=null) {
+                            System.out.printf("명언(기존) : %s\n",ws.get(Value-1).content);
+                            System.out.print("명언 : ");
+                            ws.get(Value-1).content = scanner.nextLine();
+                            System.out.printf("작가(기존) : %s\n",ws.get(Value-1).author);
+                            System.out.print("작가 : ");
+                            ws.get(Value-1).author = scanner.nextLine();
                         }else System.out.printf("%d번 명언은 존재하지 않습니다.\n",Value);
                     }
                 }
