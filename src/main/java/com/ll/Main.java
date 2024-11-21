@@ -14,16 +14,34 @@ public class Main {
 class App {
     public void run() {
         System.out.println("== 명언 앱 ==");
-        int lastId = 0;
 
-        Scanner scanner = new Scanner(System.in);
-        List<WiseSaying> ws = new ArrayList<>();
+        int lastId = 0; //마지막 기록 번호
+
+        Scanner scanner = new Scanner(System.in); //스캐너 객체 생성
+        List<WiseSaying> ws = new ArrayList<>(); //ArrayList 생성 WiseSaying 클래스의 배열을 생성
 
         while(true) {
             System.out.print("명령) ");
 
-            String cmd = scanner.nextLine();
-            if(cmd.equals("종료")) break;
+            String cmd = scanner.nextLine(); //다음 줄을 읽어오기
+
+            String[] parts = cmd.split("\\?");
+
+            if(parts[0].equals("삭제")) {
+                String param = parts[1];
+
+                String[] KeyValue = param.split("=");
+                if(KeyValue[0].equals("id")) {
+                    int Value = Integer.parseInt(KeyValue[1]);
+                    if(lastId < Value) {
+                        System.out.println("삭제할 명언이 없습니다.");
+                    }else{
+                        ws.set(Value-1, null);
+                        System.out.printf("%d번 명언이 삭제되었습니다.\n",Value);
+                    }
+                }
+            }
+            else if(cmd.equals("종료")) break;
             else if(cmd.equals("등록")) {
 
                 System.out.print("명언 : ");
@@ -33,23 +51,24 @@ class App {
 
                 int id = ++lastId;
 
-                WiseSaying wiseSaying = new WiseSaying();
+                WiseSaying wiseSaying = new WiseSaying(id, content, author); //WiseSaying 클래스의 객체에 id, content, author 저장
 
-
-                wiseSaying.id = id;
-                wiseSaying.content = content;
-                wiseSaying.author = author;
-
-                ws.add(wiseSaying);
+                ws.add(wiseSaying); //wiseSaying[n]에 id, content, author 주소 저장
 
                 System.out.printf("%d번 명언이 등록되었습니다.\n",id);
             }
             else if(cmd.equals("목록")) {
-                for(int i = lastId-1; i >= 0 ; i--) {
-                    System.out.printf("%d / %s / %s\n",ws.get(i).id,ws.get(i).author,ws.get(i).content);
+                System.out.println("번호 / 작가 / 명언");
+                System.out.println("---------------------------");
+                if(lastId == 0) {
+                    System.out.println("등록된 명언이 없습니다.");
+                }
+                else for(int i = 0; i <lastId ; i++) {
+                    if(ws.get(i)!=null)
+                        System.out.printf("%d / %s / %s\n", ws.get(i).id, ws.get(i).author, ws.get(i).content); //저장된 주소의 값에 접근해서 값 가져오기
+                        //주소가 null 값이 아닐 때 ws(wiseSaying 배열).get(주소 번호).id(내용)
                 }
             }
-//            else if()
         }
         scanner.close();
     }
@@ -59,4 +78,10 @@ class WiseSaying {
     int id;
     String content;
     String author;
+
+    WiseSaying(int id, String content, String author) {
+        this.id = id;
+        this.content = content;
+        this.author = author;
+    }
 }
