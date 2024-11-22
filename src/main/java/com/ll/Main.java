@@ -105,4 +105,9 @@ class WiseSaying {
         this.content = content;
         this.author = author;
     }
+
+    @Override
+    public String toString() {
+        return "WiseSaying (id=%d, content=\"%s\", author=\"%s\")".formatted(id, content, author);
+    }
 }
